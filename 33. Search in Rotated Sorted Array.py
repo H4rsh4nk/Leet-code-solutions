@@ -1,72 +1,58 @@
-class Solution:
-    def search(self, nums: List[int], target: int) -> int:
-        left = 0
-        right = len(nums)-1
-        while left <= right:
-            if nums[left] > nums[right]:
-                # rotated array
+def main():
+    class Solution:
+        def search(self, nums: list[int], target: int) -> int:
+            left = 0
+            right = len(nums)-1
+            while left <= right:
                 mid = (left + right) // 2
-                print(left, right, mid)
-                # if nums[mid] < nums[left]:
-                # you hit the new low [.....low,.....]
-                temp = nums[mid]
-                if target < temp:
-                    # [....,temp,.....target,......]
-                    if target <= nums[right]:
-                        if target == nums[right]:
-                            return right
-                        else:
-                            left = mid + 1
-                    # [....,target,.....temp,......]
-                    elif target >= nums[left]:
-                        if target == nums[left]:
-                            return left
+                mid_num = nums[mid]
+                left_num = nums[left]
+                right_num = nums[right]
+                print(left_num, right_num, mid_num, target)
+
+                if target == mid_num or target == right_num or target == left_num:
+                    if  target == mid_num:
+                        return mid
+                    elif target == left_num:
+                        return left
+                    else:
+                        return right
+                
+                #shifted
+                if left_num < right_num:
+                    if target <= mid_num:
+                        right = mid 
+                    else:
+                        left = mid + 1
+                #unshifted
+                else:
+                    if target > left_num:
+                        if mid_num > left_num:
+                            if target < mid_num: 
+                                right = mid
+                            else:
+                                left = mid + 1
                         else:
                             right = mid - 1
-                    else:
-                        print("firzt")
-                        return -1
-                elif target > temp:
-                    # [....,temp,.....target,......]
-                    # right = mid - 1
-                    if target <= nums[right]:
-                        if target == nums[right]:
-                            return right
-                        else:
-                            if temp < nums[right]:
+                    elif target < right_num:
+                        if mid_num < right_num:
+                            if target <= mid_num:
+                                right = mid 
+                            else: 
                                 left = mid + 1
-                            else:
-                                right = mid - 1
-
-                    elif target >= nums[left]:
-                        if target == nums[left]:
-                            return left
                         else:
-                            if temp < nums[left]:
-                                right = mid - 1
-                            else:
-                                left = mid + 1
+                            left = mid + 1
                     else:
-
-                        print("second")
                         return -1
-                else:
-                    return mid
-            else:
+            
+            return -1
 
-                # sorted normal binary search
-                mid = (left + right) // 2
-                if target < nums[mid]:
-                    right = mid - 1
-                elif target > nums[mid]:
-                    left = mid + 1
-                elif target == nums[mid]:
-                    return mid
-                else:
-                    print("THRID")
+    # Example usage
+    nums = [8,9,2,3,4]
+    target = 9
+    solution = Solution()
+    result = solution.search(nums, target)
+    print(result)
 
-                    return -1
-        print(left, right)
-        print("FOURTH")
-
-        return -1
+if __name__ =='__main__':
+    main()
